@@ -1,2 +1,2 @@
-# unc_webscraping
-We will post here webscraping scripts and resources for the UNC-CH Computational Social Science Workshop
+# Webscraping Resources for UNC Chapel Hill's Computational Social Science Workshop
+We will post here webscraping scripts and resources for your perusal
