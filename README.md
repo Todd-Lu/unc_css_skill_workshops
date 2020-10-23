@@ -5,4 +5,7 @@ You can access past recordings of our sessions here: https://www.youtube.com/pla
 
 *Session #1: my_first_webdriver.py* - Opens up your first webdriver browser
 
-*Session #2: interacting_with_webpage.py* - Interact with your webdriver browser
+*Session #2: interacting_with_webpage.py* - Interacting with your webdriver browser
+
+*Session #3: Workshop_Webscraping.py* - Interact with websites in more complex ways
+
