@@ -1,5 +1,5 @@
 # UNC-CH Computational Social Science Workshop
-# First thing we do is import all of the options we're going to need from selenium. This list expand or contract based
+# First thing we do is import the modules we're going to need from selenium. This list expand or contract based
 # on the particular code you are working with, for now it will be relatively short
 
 # The selenium developers have very good documentation. For many questions you have on how to interact with specific
@@ -14,11 +14,14 @@ from selenium.webdriver.support.ui import Select
 # webbrowser. The dialogue box that shows up when you click "download" and asks if you want to open it, save it, or
 # save to a location, is part of your computer and not the webbrowser. This lets you automatically download files to
 # a specific location on your computer. It defines a function with no arguments that sets the options for selenium.
+# the second preference setting disables browswer level notifications. Reddit started showing a notification for some
+# reason and it was getting in the way.
 
 
 def chromeprofile():
     options = webdriver.ChromeOptions()
-    prefs = {'download.default_directory': 'TYPE YOUR DIRECTORY HERE SUCH AS C:\\Users\\Will\\Documents\\ArticleLinks'}
+    prefs = {'download.default_directory': 'C:\\Users\\Will\\Documents\\ArticleLinks',
+             "profile.default_content_setting_values.notifications": 2}
     options.add_experimental_option('prefs', prefs)
     driver = webdriver.Chrome(options=options)
     return driver
@@ -36,7 +39,7 @@ driver.get('https://www.google.com')
 # To do the google search bar, you just have to find the right css selector or xpath. Inspect the search bar on google's
 # home page, but notice that if you highlight the code that immediately pops up something doesn't seem right. The entire
 # page here is highlighted. Often you can just try again and the right code will show up. This shows that the search
-# bar is an "input" element, with a large number of options set to it, note just that these exist for later. To actually
+# bar has an "input" tag, with a large number of options set to it, note just that these exist for later. To actually
 # locate this, you can right click this chunk of code in the developer console and copy the selector. We can then
 # use this to interact with the search bar. There are a couple ways to do this, I'll show you both. They're useful for
 # different things. First we'll do it by defining a variable.
@@ -52,9 +55,10 @@ googlebar = driver.find_element_by_css_selector("#tsf > div:nth-child(2) > div.A
 # it can be easier to just use different options that css selectors, but for now this is fine. So we define this
 # particular element as "googlebar", and can now use the variable googlebar to interact with the element.
 # When you write code, make sure the names of your variables are unique and easily identifiable, you will thank
-# yourself.
+# yourself later.
+
 # So there are a lot of options for interacting with this. If you want to type in the bar, use send_keys. Send_keys can
-# be used to not only type, but can send the enter keys, tab keys, arrow keys, etc. For now we'll just type. You can
+# be used to not only type, but can send the enter keys, tab keys, arrow keys, etc. For now we'll just type. We can
 # search for anything, but just as a default lets search for something innocuous. Lets search for office chair reviews.
 
 googlebar.send_keys("Best office chair review 2020")
@@ -70,6 +74,7 @@ googlebar.send_keys(Keys.ENTER)
 # back button, but you can also do this through selenium code. Let's do that instead.
 
 driver.back()
+
 # This time instead of sending enter, we'll actually click Google Search. This will also illustrate not just two methods
 # of interacting with webpages, but also how to think about what webpages are and how to think about interacting
 # with them in selenium. First lets find the css selector of the Google Search button. You may have to inspect twice
@@ -132,13 +137,13 @@ driver.get('https://www.reddit.com/')
 trendingtoday = driver.find_element_by_css_selector('#TrendingPostsContainer > div')
 
 # Now we can parse out the contents of this section of the home page, the trending posts. If you look at the structure
-# of the html, each of these posts is a div element, with an attribute called a title, and the title has exactly what
-# we're looking for. We can just scrape the titles of these elements and thatll show us what people are talking about
+# of the html, each of these posts is in a div tag, with an attribute called a title, and the title has exactly what
+# we're looking for. We can just scrape the titles of these elements and that'll show us what people are talking about
 # on reddit. Now the way we are going to do this is using a couple slightly new methods. Instead of finding a single
 # element, we're going to find all of the elements that match what we're looking for. The variable we assign this to is
 # then generated as a list structure within python, which importantly you can iterate over. So the second new part we're
 # going to be using is finding elements by their xpath rather than css_selector. We're going to find every element that
-# is a div element, with a title, within the trendingtoday chunk of code. We're also going to check how many of these
+# is in a div tag, with a title, within the trendingtoday chunk of code. We're also going to check how many of these
 # elements there are. You can see that these things are div elements and have titles when you inspect the web element.
 # div means division, it defines a new section in the html document and is a container for code.
 
@@ -148,20 +153,23 @@ len(trendingtitles)
 # Strangely, you will see there there are actually 8 things that fit this, even though we only see 4 on the main page.
 # Let's write a quick loop and print everything out.
 
+test = trendingtoday.find_elements_by_partial_link_text()
 
 for i in range(0, len(trendingtitles)):
     print(i)
-    print(trendingtitles[i])
+    print(trendingtitles[i].get_attribute("title"))
 
 
-# (Importantly, this may have changed by the day of the workshop.)
+# (Importantly, this actually changed between when I wrote the code and the day of the workshop. Had to change some
+# code to make it work correctly. This happens, webpages change, and code wont always last.)
+
 # Looks like the reddit main page has some sort of setup that displays only a certain number of trending topics and not
 # all of their trending topics. Not entirely sure why that is or what the purpose is, it might have to do with certain
 # regions, maybe there's something with the reddit app, i'm not entirely sure. But what's important is that we can see
-# that there are actually 6 trending topics. Numbers 7 and 8 are emotes. We can deal with this pretty easily by writing
+# that there are actually 6 trending topics. Numbers 8 is an emote. We can deal with this pretty easily by writing
 # some text parsing code that deletes anything with an emote structure, where it's contained within ::, but that's
 # a little beyond the scope of the purpose of this particular demonstration. If we wanted to gather these data for a
-# project, we would use this code #inside of a loop, set it on a timer, and have it save to a dataframe on every pass
+# project, we would use this code inside of a loop, set it on a timer, and have it save to a dataframe on every pass
 # with various important metadata like time of day, location scraped from, etc. You could also follow the links,
 # scrape comments and entire threads, usernames of commenters, etc. Importantly all of this can be automated. You can
 # set a loop to check these trending topics every day, every hour, every 15 minutes, and scrape this information. If you
@@ -175,20 +183,20 @@ for i in range(0, len(trendingtitles)):
 # web element, execute command on web element.
 
 # So this is going to go through some slightly edited code that I wrote to scrape from ProQuest's ABI/INFORM
-# collection. THe goal here is to access the archive through python and selenium, and to connect certain types of
+# collection. The goal here is to access the archive through python and selenium, and to connect certain types of
 # data.
 
 # First, we go to the library website and input credentials.
 
 
-
 # This is easy, it's just going to a particular website like we did before.
-driver = chromeprofile()
+# But first we're going to define this variable original_window. This will be used later to deal with having multiple
+# tabs open.
 original_window = driver.current_window_handle
 driver.get('https://auth.lib.unc.edu/ezproxy_auth.php?url=http://www.nclive.org/cgi-bin/nclsm?rsrc=29')
 
 
-# Finding the element by xpath, and then clicking on it.
+# Finding the element by xpath, and then clicking on it, to log in and authenticate.
 driver.find_element_by_xpath('//input[@value="Onyen Sign In"]').click()
 
 # Defining a variable for the username box, to then eventually pass characters to. Rather than finding an element by
@@ -199,22 +207,32 @@ driver.find_element_by_xpath('//input[@value="Onyen Sign In"]').click()
 # is it makes the code much more readable.
 
 
-
 onyen_username = driver.find_element_by_id('username')
 
 # Sending keys to the username.
-onyen_username.send_keys("TYPE YOUR ONYEN USERNAME HERE")
+onyen_username.send_keys("type your username here keep the quotes")
 
 # Defining a variable for the password box, to then eventually pass characters to.
 onyen_password = driver.find_element_by_id('password')
 
+
 # Send keys to web element.
-onyen_password.send_keys("TYPE YOUR PASSWORD HERE")
+# Sending password using a defined function so you don't have to save your password in plain text. There are more
+# secure, best practice ways to do this that involve saving the password on your computer and accessing it
+# using python, but setting that up is a little beyond the scope of this. What you should do here is define the
+# function in the script, then type out the function and your password in the console.
+
+def send_password(password):
+    onyen_password.send_keys(password)
+
+# In the console you then just type out send_password("your password here"), make sure you keep quotes around the
+# password you type.
+
 
 # Sending enter to the password box. This logs us into the archive, and specifically to the Wall Street Journal.
 onyen_password.send_keys(Keys.ENTER)
-# The next step here is to navigate within this page to where we want to go, so we can do a narrower search. We're
 
+# The next step here is to navigate within this page to where we want to go, so we can do a narrower search. We're
 # going to click on the advanced search web element. This brings us to the search page we want.
 driver.find_element_by_css_selector("#searchWithinPubForm > div.publicationBrowseSearch > div "
                                     "> div.col-md-3.col-lg-3 > a").click()
@@ -233,7 +251,6 @@ secondsearchfield.send_keys('(Office near/5 Chair) OR ("Best Office Chair") OR (
 
 # Sending an enter keystroke through a different method for the sake of demonstration.
 secondsearchfield.send_keys(u'\ue007')
-
 
 
 # So here we're going to again use another method of interacting with web elements. We're defining the variable
@@ -352,6 +369,3 @@ next_page = driver.find_element_by_xpath('//a[@title="Next Page"]')
 next_page.click()
 
 driver.close()
-
-original_window = driver.current_window_handle
-
