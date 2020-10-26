@@ -153,8 +153,6 @@ len(trendingtitles)
 # Strangely, you will see there there are actually 8 things that fit this, even though we only see 4 on the main page.
 # Let's write a quick loop and print everything out.
 
-test = trendingtoday.find_elements_by_partial_link_text()
-
 for i in range(0, len(trendingtitles)):
     print(i)
     print(trendingtitles[i].get_attribute("title"))
@@ -366,6 +364,6 @@ driver.switch_to.window(original_window)
 next_page = driver.find_element_by_xpath('//a[@title="Next Page"]')
 
 # Now that we found it, we can click it to go to the next page, and continue data collection.
-next_page.click()
 
+next_page.click()
 driver.close()
