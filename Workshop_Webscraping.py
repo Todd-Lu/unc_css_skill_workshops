@@ -357,6 +357,7 @@ driver.switch_to.window(window_handles[1])
 driver.close()
 driver.switch_to.window(original_window)
 
+
 # Finally, there are more results to grab here, so we want to go to the next page. We're going to use one last new way
 # of finding web elements. With find_element_by_xpath, you can select web elements by their specific html parts. If you
 # look at the next page button, the > at the bottom, you can see that it has an "a" tag, which defines a hyperlink, and
