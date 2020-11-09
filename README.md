@@ -9,3 +9,4 @@ You can access past recordings of our sessions here: https://www.youtube.com/pla
 
 *Session #3: Workshop_Webscraping.py* - Interact with websites in more complex ways
 
+*Session #4: troubleshooting_webpage.py* - Basics of trouble shooting your code
