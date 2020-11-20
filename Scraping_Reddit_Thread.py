@@ -1,8 +1,8 @@
 # UNC-CH Computational Social Science Workshop
 
-import re
-import numpy as np
-import pandas as pd
+import re #for regular expressions
+import numpy as np #math functions in python
+import pandas as pd #data manipulation software
 from selenium import webdriver
 from datetime import date
 
@@ -16,7 +16,7 @@ from datetime import date
 
 def chromeprofile():
     options = webdriver.ChromeOptions()
-    prefs = {'download.default_directory': 'C:\\Users\\Will\\Documents\\ArticleLinks',
+    prefs = {'download.default_directory': 'INSERT WORKING DIRECTORY HERE',
              "profile.default_content_setting_values.notifications": 2}
     options.add_experimental_option('prefs', prefs)
     driver = webdriver.Chrome(options=options)

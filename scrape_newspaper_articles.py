@@ -23,7 +23,7 @@ import pandas as pd
 
 def chromeprofile():
     options = webdriver.ChromeOptions()
-    prefs = {'download.default_directory': 'C:\\Users\\Will\\Documents\\ArticleLinks'}
+    prefs = {'download.default_directory': 'INSERT WORKING DIRECTORY HERE'}
     options.add_experimental_option('prefs', prefs)
     driver = webdriver.Chrome(options=options)
     return driver
