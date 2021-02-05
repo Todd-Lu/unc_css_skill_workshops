@@ -1,0 +1,83 @@
+library(twitteR)
+
+
+#We'll be using twitteR here. One thing that's important about this is that Twitter has a lot of different APIs, and twitteR can only access one them. Specifically, 
+#twitteR accesses the rest API that lets you read and write twitter data. You can look at recent history, users, user information such as who they are following, a url for
+#their profile, and other somewhat static parts of twitter. You can also use it to post. There are other packages like rtweet that you can use too, and you can also simply
+#access the API by url, but but we'll focus on just the rest api using twitteR today.
+
+#Now that we've signed up for a developer account and have API credentials, we can use twitteR to efficiently gather data from Twitter.
+#The first thing we'll have to do is authenticate, which we do with setup_twitter_oauth()
+
+#The consumer key and consumer secret are the api key and api secret. The access token and access secret are named  the same in Twitter. It'll ask you if you want to
+#store the information on your computer, I generally decline that.
+
+setup_twitter_oauth(consumer_key=api_key,
+                    consumer_secret=api_secret,
+                    access_token=access_token, 
+                    access_secret=access_secret)
+
+#After we authenticate with twitter, we can immediately start exploring the platform.
+
+#First lets take a look at individual users. Let's look at what senator Thom Tillis is up to. 
+
+user <- getUser("SenThomTillis")
+
+#To get a sense of what that actually gets us, let's take a look at the contents of this.
+View(user)
+
+#Looks like it gives us a bunch of information about the profile, from information about when they joined, their description, how many followers they have, etc.
+#We can use this then explore a little more about the twitter profile. Notably, "friends" here refers to who this account, senator Tillis, follows.
+friends <- user$getFriends()
+
+#This might take a second, senator Tillis follows around 4200 people.
+#Let's take a quick look at what this is.
+class(friends)
+#So friends is in a list structure, let's see what that looks like.
+View(friends)
+#This looks like a list of all the same information we had when we collected Thom Tillis alone. But this here is a little inconvenient to work with and read. Let's reshape this
+#to a data frame. Luckily twitteR has some tools for that. 
+tillis_friends_df <- twListToDF(friends)
+#Now let's take a look at this.
+utils::View(tillis_friends_df)
+
+#This is a ton of information, it's really neatly organized, and very clean.
+
+
+#So let's see what else we can get. Let's see what tweets senator Tillis liked. Favorites takes the username as the first argument, and has a number of optional arguments. 
+#n=10 is telling it how many to collect, and maxes out at 200.
+
+favorites <- favorites(user, n=10)
+#This gives us a similar structure as before, a big list.
+
+favorites_tillis_df <- twListToDF(favorites)
+utils::View(favorites_tillis_df)
+
+#We can also scrape timelines, which are what a particular user actually sees when they are themselves on twitter.
+timeline <- userTimeline(user, n=10)
+timeline_tillis_df <- twListToDF(favorites)
+
+#Can search twitter for particular strings
+twitter_search <- searchTwitter("Parler", n=10)
+twitter_search_df <- twListToDF(twitter_search)
+utils::View(twitter_search_df)
+#Note that this hits any matching string, from any language. Also this is sample of tweets, it doesn't just get the most recent ones. It is not, however, 
+#a truly random sample of tweets.
+
+#We can also get tweets that tag particular people. 
+twitter_search_at <- searchTwitter("@SenThomTillis", n=10)
+tillis_ats <- twListToDF(twitter_search_at)
+utils::View(tillis_ats)
+
+
+#Just about every API, that's set up properly, limits how many requests you can make. This is called a rate limit. If you search for every tweet that contains the string 
+#"Doritos" you will, after a certain amount of tweets collected, get locked out of the API. Rate limits are typically published by the API operators, and vary by the particular
+#request that you're making. We can see here what the rate limits for Twitter are.
+
+getCurRateLimitInfo()
+
+#If you exceed the rate limit you get locked out until it resets, and importantly there is even a rate limit for querying the rate limit. This is most important for if 
+#you want to set up a loop that collects tweets. You can set how many requests you make within a time period to keep from getting locked out, so that your code can just run. 
+
+#If you want to explore other APIs, https://www.programmableweb.com/category/all/apis?order=field_popularity has a directory of APIs that you can search.  If you want to use
+#an API and there is no R or Python package for it, you can still use it but you'll have to do it manually through URLs.
