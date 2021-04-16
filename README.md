@@ -12,3 +12,5 @@ You can access past recordings of our sessions here: https://www.youtube.com/pla
 *Session #4: troubleshooting_webpage.py* - Basics of trouble shooting your code
 
 *Session #5: Scraping_Reddit_Thread.py and scrape_newspaper_articles.py* - Scaling up Web Scraping
+
+*Session #6:Twitter_API* - Accessing Twitter Data 
