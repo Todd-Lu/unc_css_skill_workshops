@@ -13,4 +13,6 @@ You can access past recordings of our sessions here: https://www.youtube.com/pla
 
 *Session #5: Scraping_Reddit_Thread.py and scrape_newspaper_articles.py* - Scaling up Web Scraping
 
-*Session #6:Twitter_API* - Accessing Twitter Data 
+*Session #6: Twitter_API* - Accessing Twitter Data 
+
+*Session #7: intro_text_analysis.R* - Intro to NLP for sociologists, tidy text, dictionary-based models, and unsupervised machine learning 
