@@ -2,12 +2,11 @@ library(stringr)
 library(tidyverse)
 library(ggplot2)
 
-wd = 'C:/Users/toddj/Documents/GitHub/unc_webscraping/data'
+wd = ''
 setwd(wd)
 
 
-
-# In this workshop, we are going to use text data on a random sample of newspaper articles covering George Floyd's death
+# In this workshop, we are going to use text data on a random sample of newspaper articles covering George Floyd's death (5k articles, between May and July 2020)
 
 
 ## Importing and Managing Text Data
@@ -19,15 +18,16 @@ floyd_md = read_csv('floyd_news_md.csv')
 head(floyd_md)
 head(floyd_fulltext)
 
-## Pre-Processing Text Data
+## Pre-Processing Text Data in Tidy Text Format
 library(tidytext)
 
-# unnest tokens turns text data into a document - term format
+# unnest tokens turns text data into a "document - term" format
 floyd_words = floyd_fulltext %>%
   unnest_tokens(word, fulltext)
 
 floyd_words %>%
-  count(word, sort = T)
+  count(word, sort = T) %>%
+  head(20)
 
 
 # using a dictionary of "Stop Words" to remove noise
@@ -49,7 +49,8 @@ floyd_words = floyd_words %>%
 
   # seems reasonable
 floyd_words %>%
-  count(word, sort = T)
+  count(word, sort = T) %>%
+  head(20)
 
 
 # can combine with meta data (e.g. census region)
@@ -92,7 +93,7 @@ floyd_fulltext[floyd_fulltext$crime == 1,]$fulltext[1]
 
 # Sentiment analysis
 
-  #there are a wide variety of "sentiment" dictionaries from which to choose. And each one is coded differently depending on the atuhor. The "right" one depends on your research question. 
+  # there are a wide variety of "sentiment" dictionaries from which to choose. And each one is coded differently depending on the atuhor. The "right" one depends on your research question. 
 
 afinn = get_sentiments('afinn') # negative to positive scores (-5 to 5)
 bing = get_sentiments('bing') # brinary positive and negative
@@ -171,7 +172,8 @@ orgs_people = entities_in_text %>%
            entity,
            entity_type)
 
-orgs_people
+orgs_people %>% head(20)
+
 
 
   # we can also have spacy extract words that have entities attached to them
@@ -212,7 +214,7 @@ out = prepDocuments(blm_processed_text$documents,
                     lower.thresh = 5)
 
 
-# now let's run the actual structural topic model
+# now let's run the actual structural topic model -- if you have a big dataset, this will take a while!!!
 blm_fit20 = stm(documents = out$documents,
                 vocab = out$vocab,
                 K = 20,
@@ -246,7 +248,8 @@ thoughts
 
 fit_df = make.dt(blm_fit20) 
 
-fit_df
+fit_df %>% head(10)
+
 
 combined_df = fit_df %>%
   bind_cols(out$meta)
