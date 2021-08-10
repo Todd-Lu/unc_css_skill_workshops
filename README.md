@@ -2,6 +2,7 @@
 We will post here webscraping scripts and resources for your perusal. 
 
 You can access [past recordings of our sessions here](https://youtube.com/playlist?list=PLz3DI2asxT9qff2Bb7pi35yb_6ImhQc_2)
+
 *Session #1: my_first_webdriver.py* - Opens up your first webdriver browser
 
 *Session #2: interacting_with_webpage.py* - Interacting with your webdriver browser
