@@ -3,10 +3,10 @@ library(magrittr)
 library(jsonlite)
 library(tm)
 library(tidytext)
-
+library(lubridate)
 
 #First thing we need to do is load the data into R. Since it's a json, we'll use stream_in from jsonlite to read the data into a data frame.
-reviews <- stream_in(file("C:\\Users\\Will\\Downloads\\Appliances_50.json\\Appliances_5.json"))
+reviews <- stream_in(file("Appliances_50.json\\Appliances_5.json"))
 
 #Now that we have it loaded, we can take a quick look at what we have here.
 head(reviews)
