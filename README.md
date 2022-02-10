@@ -17,4 +17,4 @@ You can access [past recordings of our sessions here](https://youtube.com/playli
 
 *Session #7: intro_text_analysis.R* - Intro to NLP for sociologists, tidy text, dictionary-based models, and unsupervised machine learning 
 
-*Session #8: applying_ocr.R* - Introduction to Using OCR Tesseract in R -- Turning images into Machine Readable Data
+*Session #8: ocr_example.R* - Introduction to Using OCR Tesseract in R -- Turning images into Machine Readable Data
